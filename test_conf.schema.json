@@ -1,0 +1,46 @@
+{
+  "type": "object",
+  "properties": {
+    "function": {
+      "type": "string"
+    },
+    "testConfigs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/TestConfig"
+      }
+    }
+  },
+  "required": [
+    "function",
+    "testConfigs"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "TestConfig": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "shouldFail": {
+          "type": "boolean"
+        },
+        "cause": {
+          "type": "string",
+          "enum": [
+            "endless_loop",
+            "wrong_datatype",
+            "illegal_argument",
+            "wrong_result"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "shouldFail"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

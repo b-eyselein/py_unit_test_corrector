@@ -1,0 +1,7 @@
+.idea/*
+!.idea/jsonSchemas.xml
+
+venv/
+results.json/
+
+__pycache__

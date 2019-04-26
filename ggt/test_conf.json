@@ -1,0 +1,49 @@
+{
+  "function": "ggt",
+  "testConfigs": [
+    {
+      "id": 0,
+      "shouldFail": false
+    },
+    {
+      "id": 1,
+      "shouldFail": true,
+      "cause": "wrong_datatype"
+    },
+    {
+      "id": 2,
+      "shouldFail": true,
+      "cause": "wrong_datatype"
+    },
+    {
+      "id": 3,
+      "shouldFail": true,
+      "cause": "illegal_argument"
+    },
+    {
+      "id": 4,
+      "shouldFail": true,
+      "cause": "illegal_argument"
+    },
+    {
+      "id": 5,
+      "shouldFail": true,
+      "cause": "wrong_result"
+    },
+    {
+      "id": 6,
+      "shouldFail": true,
+      "cause": "wrong_result"
+    },
+    {
+      "id": 7,
+      "shouldFail": true,
+      "cause": "wrong_result"
+    },
+    {
+      "id": 8,
+      "shouldFail": true,
+      "cause": "endless_loop"
+    }
+  ]
+}
