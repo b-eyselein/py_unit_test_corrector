@@ -1,0 +1,19 @@
+{
+  "function": "factorial",
+  "testConfigs": [
+    {
+      "id": 0,
+      "shouldFail": false
+    },
+    {
+      "id": 1,
+      "shouldFail": true,
+      "cause": "illegal_argument"
+    },
+    {
+      "id": 2,
+      "shouldFail": true,
+      "cause": "wrong_result"
+    }
+  ]
+}

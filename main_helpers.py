@@ -74,22 +74,24 @@ def read_test_file_content(test_file_path: Path) -> Optional[str]:
         return test_file.read()
 
 
-def run_tests(ex_path: Path, test: TestConfig, test_file_content: str, current_ex: str,
-              test_file_copy_path: Path) -> Union[str, Result]:
+def run_test(ex_path: Path, test: TestConfig, test_file_content: str, current_ex: str) -> Union[str, Result]:
     file_to_test_path: Path = ex_path / f'{current_ex}_{test.test_id}.py'
+
+    test_file_path: Path = ex_path / f'{current_ex}_{test.test_id}_test.py'
 
     if not file_to_test_path.exists():
         return f'The file to test {str(file_to_test_path)} does not exist!'
 
-    test_file_copy_path.write_text(test_file_content.replace(
+    test_file_path.write_text(test_file_content.replace(
         f'from {current_ex}_0 import {current_ex}',
-        f'from {current_ex}_{test.test_id} import {current_ex}'
+        f'from {str(file_to_test_path.name)[:-3]} import {current_ex}'
     ))
 
-    completed_process: CompletedProcess = subprocess_run(
-        f'(cd {current_ex} && timeout -t 2 python3 -m unittest {test_file_copy_path.name})',
-        capture_output=True, shell=True, text=True
-    )
+    cmd: str = f'(cd {current_ex} && timeout -t 2 python3 -m unittest {test_file_path.name})'
+
+    completed_process: CompletedProcess = subprocess_run(cmd, capture_output=True, shell=True, text=True)
+
+    test_file_path.unlink()
 
     return Result(
         test,

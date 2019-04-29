@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-RES_FILE=results.json
-EX=ggt
+EX=${1:-factorial}
+
+RES_FILE=results/${EX}_results.json
 CONF_FILE_NAME=test_conf.json
 
 CONF_FILE=${EX}/${CONF_FILE_NAME}
@@ -24,5 +25,5 @@ fi
 docker run -it --rm \
     -v $(pwd)/${CONF_FILE}:/data/${CONF_FILE_NAME}:ro \
     -v $(pwd)/${EX}/:/data/${EX}/ \
-    -v $(pwd)/${RES_FILE}:/data/${RES_FILE} \
+    -v $(pwd)/${RES_FILE}:/data/results.json \
     unit_test_corrector

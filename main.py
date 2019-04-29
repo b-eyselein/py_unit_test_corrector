@@ -3,7 +3,7 @@ from pathlib import Path
 from sys import stderr
 from typing import Dict, Optional, List, Union
 
-from main_helpers import read_test_file_content, run_tests, Result, read_complete_test_config, CompleteTestConfig
+from main_helpers import read_test_file_content, run_test, Result, read_complete_test_config, CompleteTestConfig
 
 # helpers
 bash_red_esc: str = '\033[0;31m'
@@ -34,16 +34,10 @@ if not result_file_path.exists():
     print(f'{bash_red_esc}There is no result file {result_file_path}', file=stderr)
     exit(23)
 
-# create copy of tests file
-test_file_copy_path: Path = ex_path / f'{current_exercise}_test_copy.py'
-if not test_file_copy_path.exists():
-    test_file_copy_path.touch()
-
 results: List[Dict] = []
 
 for test_config in complete_test_config.test_configs:
-    result: Union[str, Result] = run_tests(ex_path, test_config, test_file_content, current_exercise,
-                                           test_file_copy_path)
+    result: Union[str, Result] = run_test(ex_path, test_config, test_file_content, current_exercise)
 
     if isinstance(result, Result):
         results.append(result.to_json_dict())
@@ -51,8 +45,5 @@ for test_config in complete_test_config.test_configs:
         # TODO: process error msg further?!
         print(f'{bash_red_esc}There has been an error while correction: {result}')
         exit(24)
-
-# remove copy of tests file
-test_file_copy_path.unlink()
 
 result_file_path.write_text(json_dumps(results, indent=2))
