@@ -7,9 +7,10 @@ from main_helpers import read_test_file_content, run_test, Result, read_complete
 
 # helpers
 bash_red_esc: str = '\033[0;31m'
+cwd: Path = Path.cwd()
 
 # read complete test configuration
-test_config_path: Path = Path.cwd() / 'test_conf.json'
+test_config_path: Path = cwd / 'test_conf.json'
 
 complete_test_config: Optional[CompleteTestConfig] = read_complete_test_config(test_config_path)
 
@@ -19,8 +20,8 @@ if complete_test_config is None:
 
 current_exercise: str = complete_test_config.function
 
-ex_path: Path = Path.cwd() / current_exercise
-result_file_path: Path = Path.cwd() / 'results.json'
+ex_path: Path = cwd / current_exercise
+result_file_path: Path = cwd / 'results.json'
 
 # read unit test file content
 test_file_path: Path = ex_path / f'{current_exercise}_test.py'
