@@ -1,10 +1,10 @@
-import re
 from json import load as json_load
 from pathlib import Path
+from re import compile as re_compile
 from subprocess import CompletedProcess, run as subprocess_run
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Pattern, Union
 
-id_regex = re.compile(r'.*_(\d+)\.py')
+id_regex: Pattern[str] = re_compile(r'.*_(\d+)\.py')
 
 
 class TestConfig:
@@ -17,7 +17,7 @@ class TestConfig:
             raise Exception(f'the field should_fail of a test must be a bool but was {type(should_fail)}!')
         self.should_fail: bool = should_fail
 
-        if not (cause is None or isinstance(cause, str)):
+        if cause is not None and not isinstance(cause, str):
             raise Exception(f'the field cause of a test must be a str or None but was {type(cause)}!')
         self.cause: Optional[str] = cause
 
@@ -61,9 +61,7 @@ def read_complete_test_config(test_config_file_path: Path) -> Optional[CompleteT
     test_configs: List[TestConfig] = []
 
     for tc in parsed_json.get('testConfigs'):
-        test_configs.append(TestConfig(
-            tc.get('id'), tc.get('shouldFail'), tc.get('cause')
-        ))
+        test_configs.append(TestConfig(tc.get('id'), tc.get('shouldFail'), tc.get('cause')))
 
     return CompleteTestConfig(function_name, test_configs)
 
@@ -77,21 +75,25 @@ def read_test_file_content(test_file_path: Path) -> Optional[str]:
 
 
 def run_tests(ex_path: Path, test: TestConfig, test_file_content: str, current_ex: str,
-              test_file_copy_path: Path) -> Optional[Result]:
-    file_to_test_path: Path = ex_path / ''
+              test_file_copy_path: Path) -> Union[str, Result]:
+    file_to_test_path: Path = ex_path / f'{current_ex}_{test.test_id}.py'
+
+    if not file_to_test_path.exists():
+        return f'The file to test {str(file_to_test_path)} does not exist!'
 
     test_file_copy_path.write_text(test_file_content.replace(
-        "from {}_0 import {}".format(current_ex, current_ex),
-        "from {}_{} import {}".format(current_ex, test.test_id, current_ex)
+        f'from {current_ex}_0 import {current_ex}',
+        f'from {current_ex}_{test.test_id} import {current_ex}'
     ))
 
     completed_process: CompletedProcess = subprocess_run(
-        f'(cd {current_ex} && timeout -t 2 python3 {test_file_copy_path.name})',
+        f'(cd {current_ex} && timeout -t 2 python3 -m unittest {test_file_copy_path.name})',
         capture_output=True, shell=True, text=True
     )
 
     return Result(
-        test, str(file_to_test_path),
+        test,
+        str(file_to_test_path),
         completed_process.returncode,
         completed_process.stdout[:1000].split('\n')[:50],
         completed_process.stderr[:1000].split('\n')[:50]

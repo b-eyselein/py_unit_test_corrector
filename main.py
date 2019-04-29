@@ -1,7 +1,7 @@
 from json import dumps as json_dumps
 from pathlib import Path
 from sys import stderr
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Union
 
 from main_helpers import read_test_file_content, run_tests, Result, read_complete_test_config, CompleteTestConfig
 
@@ -23,7 +23,7 @@ ex_path: Path = Path.cwd() / current_exercise
 result_file_path: Path = Path.cwd() / 'results.json'
 
 # read unit test file content
-test_file_path: Path = ex_path / "{}_test.py".format(current_exercise)
+test_file_path: Path = ex_path / f'{current_exercise}_test.py'
 test_file_content: Optional[str] = read_test_file_content(test_file_path)
 if test_file_content is None:
     print(f'{bash_red_esc}There is no test file {test_file_path}!', file=stderr)
@@ -35,17 +35,22 @@ if not result_file_path.exists():
     exit(23)
 
 # create copy of tests file
-test_file_copy_path: Path = ex_path / "{}_test_copy.py".format(current_exercise)
+test_file_copy_path: Path = ex_path / f'{current_exercise}_test_copy.py'
 if not test_file_copy_path.exists():
     test_file_copy_path.touch()
 
 results: List[Dict] = []
 
 for test_config in complete_test_config.test_configs:
-    result: Optional[Result] = run_tests(ex_path, test_config, test_file_content, current_exercise, test_file_copy_path)
+    result: Union[str, Result] = run_tests(ex_path, test_config, test_file_content, current_exercise,
+                                           test_file_copy_path)
 
-    if result is not None:
+    if isinstance(result, Result):
         results.append(result.to_json_dict())
+    else:
+        # TODO: process error msg further?!
+        print(f'{bash_red_esc}There has been an error while correction: {result}')
+        exit(24)
 
 # remove copy of tests file
 test_file_copy_path.unlink()
