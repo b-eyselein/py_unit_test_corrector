@@ -22,7 +22,11 @@ class TestConfig:
         self.cause: Optional[str] = cause
 
     def to_json_dict(self) -> Dict:
-        return self.__dict__
+        return {
+            "testId": self.test_id,
+            "shouldFail": self.should_fail,
+            "cause": self.cause
+        }
 
 
 class CompleteTestConfig:
