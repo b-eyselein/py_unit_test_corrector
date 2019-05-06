@@ -1,6 +1,6 @@
 import unittest
 
-from ggt_0 import ggt
+from ggt import ggt
 
 
 class GgtTest(unittest.TestCase):

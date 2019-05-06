@@ -47,4 +47,4 @@ for test_config in complete_test_config.test_configs:
         print(f'{bash_red_esc}There has been an error while correction: {result}')
         exit(24)
 
-result_file_path.write_text(json_dumps(results, indent=2))
+result_file_path.write_text(json_dumps({'results': results}, indent=2))

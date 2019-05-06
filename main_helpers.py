@@ -87,7 +87,7 @@ def run_test(ex_path: Path, test: TestConfig, test_file_content: str, current_ex
         return f'The file to test {str(file_to_test_path)} does not exist!'
 
     test_file_path.write_text(test_file_content.replace(
-        f'from {current_ex}_0 import {current_ex}',
+        f'from {current_ex} import {current_ex}',
         f'from {str(file_to_test_path.name)[:-3]} import {current_ex}'
     ))
 

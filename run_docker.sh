@@ -2,12 +2,14 @@
 
 EX=${1:-factorial}
 
+IMG_NAME=beyselein/py_unit_test_corrector:latest
+
 RES_FILE=results/${EX}_result.json
 CONF_FILE_NAME=test_data.json
 
 CONF_FILE=${EX}/${CONF_FILE_NAME}
 
-docker build -t unit_test_corrector .
+docker build -t ${IMG_NAME} .
 
 #docker image prune -f
 
@@ -26,4 +28,4 @@ docker run -it --rm \
     -v $(pwd)/${CONF_FILE}:/data/${CONF_FILE_NAME}:ro \
     -v $(pwd)/${EX}/:/data/${EX}/ \
     -v $(pwd)/${RES_FILE}:/data/result.json \
-    unit_test_corrector
+    ${IMG_NAME}
