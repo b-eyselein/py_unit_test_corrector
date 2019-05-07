@@ -10,19 +10,37 @@
       "id": 1,
       "shouldFail": true,
       "cause": "illegal_argument",
-      "description": "Es soll überprüft werden, ob die Eingabe eine Ganzzahl ist."
+      "description": "Es soll überprüft werden, ob die eingegebene Liste die gleiche Länge wie die Tabellenreihen hat."
     },
     {
       "id": 2,
       "shouldFail": true,
       "cause": "illegal_argument",
-      "description": "Es soll überprüft werden, ob die Eingabe größer oder gleich 0 ist."
+      "description": "Es soll überprüft werden, ob der Inhalt der eingegebenen Liste die gleichen Datentypen hat wie die Anfangsdaten.",
     },
-    {
+,    {
       "id": 3,
       "shouldFail": true,
       "cause": "wrong_result",
-      "description": "Es soll überprüft werden, ob die Funktion das richtige Resultat liefert."
+      "description": "Die Funktion sollte bei Erfolg True ausgeben."
+    },
+    {
+      "id": 4,
+      "shouldFail": true,
+      "cause": "wrong_result",
+      "description": "Die letzte Zeile der Tabelle muss der angefügten Zeile entsprechen."
+    },
+    {
+      "id": 5,
+      "shouldFail": true,
+      "cause": "wrong_result",
+      "description": "Die neue Anzahl an Zeilen muss um genau 1 höher sein."
+    },
+    {
+      "id": 6,
+      "shouldFail": true,
+      "cause": "wrong_result",
+      "description": "Zahlen in der neuen Zeile sollen automatisch von Strings zu floats konvertiert werden."
     }
   ]
 }
