@@ -1,0 +1,28 @@
+{
+  "function": "insert",
+  "testConfigs": [
+    {
+      "id": 0,
+      "shouldFail": false,
+      "description": "Diese Implementierung ist korrekt und sollte alle Tests bestehen."
+    },
+    {
+      "id": 1,
+      "shouldFail": true,
+      "cause": "illegal_argument",
+      "description": "Es soll überprüft werden, ob die Eingabe eine Ganzzahl ist."
+    },
+    {
+      "id": 2,
+      "shouldFail": true,
+      "cause": "illegal_argument",
+      "description": "Es soll überprüft werden, ob die Eingabe größer oder gleich 0 ist."
+    },
+    {
+      "id": 3,
+      "shouldFail": true,
+      "cause": "wrong_result",
+      "description": "Es soll überprüft werden, ob die Funktion das richtige Resultat liefert."
+    }
+  ]
+}
