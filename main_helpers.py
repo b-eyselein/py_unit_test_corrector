@@ -11,7 +11,7 @@ class TestConfig:
     def __init__(self, test_id: int, should_fail: bool, cause: Optional[str], description: str):
         if not isinstance(test_id, int):
             raise Exception(f'the field test_id of a test must be an int but was {type(test_id)}!')
-        self.test_id: int = test_id
+        self.id: int = test_id
 
         if not isinstance(should_fail, bool):
             raise Exception(f'the field should_fail of a test must be a bool but was {type(should_fail)}!')
@@ -27,7 +27,7 @@ class TestConfig:
 
     def to_json_dict(self) -> Dict:
         return {
-            "testId": self.test_id,
+            "id": self.id,
             "shouldFail": self.should_fail,
             "cause": self.cause,
             "description": self.description
@@ -84,9 +84,9 @@ def read_test_file_content(test_file_path: Path) -> Optional[str]:
 
 
 def run_test(ex_path: Path, test: TestConfig, test_file_content: str, current_ex: str) -> Union[str, Result]:
-    file_to_test_path: Path = ex_path / f'{current_ex}_{test.test_id}.py'
+    file_to_test_path: Path = ex_path / f'{current_ex}_{test.id}.py'
 
-    test_file_path: Path = ex_path / f'{current_ex}_{test.test_id}_test.py'
+    test_file_path: Path = ex_path / f'{current_ex}_{test.id}_test.py'
 
     if not file_to_test_path.exists():
         return f'The file to test {str(file_to_test_path)} does not exist!'
@@ -106,6 +106,6 @@ def run_test(ex_path: Path, test: TestConfig, test_file_content: str, current_ex
         test,
         str(file_to_test_path),
         completed_process.returncode,
-        completed_process.stdout[:1000].split('\n')[:50],
-        completed_process.stderr[:1000].split('\n')[:50]
+        completed_process.stdout[:10_000].split('\n')[:50],
+        completed_process.stderr[:10_000].split('\n')[:50]
     )
