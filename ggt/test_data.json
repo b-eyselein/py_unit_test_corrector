@@ -3,47 +3,56 @@
   "testConfigs": [
     {
       "id": 0,
-      "shouldFail": false
+      "shouldFail": false,
+      "description": ""
     },
     {
       "id": 1,
       "shouldFail": true,
-      "cause": "wrong_datatype"
+      "cause": "wrong_datatype",
+      "description": ""
     },
     {
       "id": 2,
       "shouldFail": true,
-      "cause": "wrong_datatype"
+      "cause": "wrong_datatype",
+      "description": ""
     },
     {
       "id": 3,
       "shouldFail": true,
-      "cause": "illegal_argument"
+      "cause": "illegal_argument",
+      "description": ""
     },
     {
       "id": 4,
       "shouldFail": true,
-      "cause": "illegal_argument"
+      "cause": "illegal_argument",
+      "description": ""
     },
     {
       "id": 5,
       "shouldFail": true,
-      "cause": "wrong_result"
+      "cause": "wrong_result",
+      "description": ""
     },
     {
       "id": 6,
       "shouldFail": true,
-      "cause": "wrong_result"
+      "cause": "wrong_result",
+      "description": ""
     },
     {
       "id": 7,
       "shouldFail": true,
-      "cause": "wrong_result"
+      "cause": "wrong_result",
+      "description": ""
     },
     {
       "id": 8,
       "shouldFail": true,
-      "cause": "endless_loop"
+      "cause": "endless_loop",
+      "description": ""
     }
   ]
 }

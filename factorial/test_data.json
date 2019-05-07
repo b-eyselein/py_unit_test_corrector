@@ -3,17 +3,20 @@
   "testConfigs": [
     {
       "id": 0,
-      "shouldFail": false
+      "shouldFail": false,
+      "description": ""
     },
     {
       "id": 1,
       "shouldFail": true,
-      "cause": "illegal_argument"
+      "cause": "illegal_argument",
+      "description": ""
     },
     {
       "id": 2,
       "shouldFail": true,
-      "cause": "wrong_result"
+      "cause": "wrong_result",
+      "description": ""
     }
   ]
 }

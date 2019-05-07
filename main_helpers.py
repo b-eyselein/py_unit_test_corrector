@@ -8,7 +8,7 @@ id_regex: Pattern[str] = re_compile(r'.*_(\d+)\.py')
 
 
 class TestConfig:
-    def __init__(self, test_id: int, should_fail: bool, cause: Optional[str]):
+    def __init__(self, test_id: int, should_fail: bool, cause: Optional[str], description: str):
         if not isinstance(test_id, int):
             raise Exception(f'the field test_id of a test must be an int but was {type(test_id)}!')
         self.test_id: int = test_id
@@ -21,11 +21,16 @@ class TestConfig:
             raise Exception(f'the field cause of a test must be a str or None but was {type(cause)}!')
         self.cause: Optional[str] = cause
 
+        if not isinstance(description, str):
+            raise Exception(f'the field description of a test must be a str but was {type(description)}')
+        self.description: str = description
+
     def to_json_dict(self) -> Dict:
         return {
             "testId": self.test_id,
             "shouldFail": self.should_fail,
-            "cause": self.cause
+            "cause": self.cause,
+            "description": self.description
         }
 
 
@@ -65,7 +70,7 @@ def read_complete_test_config(test_config_file_path: Path) -> Optional[CompleteT
     test_configs: List[TestConfig] = []
 
     for tc in parsed_json.get('testConfigs'):
-        test_configs.append(TestConfig(tc.get('id'), tc.get('shouldFail'), tc.get('cause')))
+        test_configs.append(TestConfig(tc.get('id'), tc.get('shouldFail'), tc.get('cause'), tc.get('description')))
 
     return CompleteTestConfig(function_name, test_configs)
 

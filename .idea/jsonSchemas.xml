@@ -30,11 +30,8 @@
                 <list>
                   <Item>
                     <option name="pattern" value="true" />
-                    <option name="path" value="*/test_conf.json" />
+                    <option name="path" value="*/test_data.json" />
                     <option name="mappingKind" value="Pattern" />
-                  </Item>
-                  <Item>
-                    <option name="path" value="ggt/test_conf.json" />
                   </Item>
                 </list>
               </option>
