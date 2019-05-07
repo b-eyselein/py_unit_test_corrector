@@ -1,0 +1,40 @@
+{
+  "function": "circle",
+  "testConfigs": [
+    {
+      "id": 0,
+      "shouldFail": false,
+      "description": "Musterlösung..."
+    },
+    {
+      "id": 1,
+      "shouldFail": true,
+      "cause": "illegal_argument",
+      "description": "Die X-Koordinate sollte eine Ganz- oder Fließkommazahl sein."
+    },
+    {
+      "id": 2,
+      "shouldFail": true,
+      "cause": "illegal_argument",
+      "description": "Die Y-Koordinate sollte eine Ganz- oder Fließkommazahl sein."
+    },
+    {
+      "id": 3,
+      "shouldFail": true,
+      "cause": "illegal_argument",
+      "description": "Der Radius sollte eine Ganz- oder Fließkommazahl sein."
+    },
+    {
+      "id": 4,
+      "shouldFail": true,
+      "cause": "illegal_argument",
+      "description": "Der Radius sollte größer oder gleich 0 sein."
+    },
+    {
+      "id": 5,
+      "shouldFail": true,
+      "cause": "wrong_result",
+      "description": "Die Fläche des Kreises sollte richtig berechnet werden"
+    }
+  ]
+}
