@@ -7,20 +7,26 @@ class TableTest(unittest.TestCase):
     def testInsert(self):
         raum = Table('raum')
         raum.load_from_csv('raum.csv')
+
         raum2 = Table('raum2')
         raum2.copy(raum)
-        row = ['info_turing', 'turing']
-        self.assertFalse(raum.insert(row))
-        row = ['500', 'turing', 500]
-        self.assertFalse(raum.insert(row))
+
+        with self.assertRaises(Exception):
+            raum.insert(['info_turing', 'turing'])
+
+        with self.assertRaises(Exception):
+            raum.insert(['500', 'turing', 500])
+
         row = ['info_turing', 'turing', 500]
         self.assertTrue(raum.insert(row))
-        self.assertListEqual(raum.data[-1], row)
-        self.assertEqual(len(raum.data), len(raum2.data)+1)
+
+        self.assertEqual(len(raum.data), len(raum2.data) + 1)
         self.assertEqual(len(raum.data[0]), len(raum2.data[0]))
+
+        self.assertListEqual(raum.data[-1], row)
         self.assertListEqual(raum2.data, raum.data[:-1])
-        row = ['info_zuse', 'zuse', '500']
-        raum.insert(row)
+
+        raum.insert(['info_zuse', 'zuse', '500'])
         self.assertListEqual(raum.data[-1], ['info_zuse', 'zuse', 500.0])
 
 
