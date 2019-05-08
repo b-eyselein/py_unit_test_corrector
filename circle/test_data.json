@@ -14,28 +14,46 @@
       "description": "Die X-Koordinate sollte eine Ganz- oder Fließkommazahl sein."
     },
     {
-      "id": 2,
-      "shouldFail": true,
-      "cause": "illegal_argument",
-      "description": "Die Y-Koordinate sollte eine Ganz- oder Fließkommazahl sein."
-    },
-    {
       "id": 3,
       "shouldFail": true,
-      "cause": "illegal_argument",
-      "description": "Der Radius sollte eine Ganz- oder Fließkommazahl sein."
+      "cause": "logic_error",
+      "description": "Der Wert des Konstruktorarguments 'center_x' sollte unter dem selben Namen als Argument zugänglich sein."
     },
     {
       "id": 4,
       "shouldFail": true,
       "cause": "illegal_argument",
+      "description": "Die Y-Koordinate sollte eine Ganz- oder Fließkommazahl sein."
+    },
+    {
+      "id": 5,
+      "shouldFail": true,
+      "cause": "logic_error",
+      "description": "Der Wert des Konstruktorarguments 'center_y' sollte unter dem selben Namen als Argument zugänglich sein."
+    },
+    {
+      "id": 6,
+      "shouldFail": true,
+      "cause": "illegal_argument",
+      "description": "Der Radius sollte eine Ganz- oder Fließkommazahl sein."
+    },
+    {
+      "id": 7,
+      "shouldFail": true,
+      "cause": "illegal_argument",
       "description": "Der Radius sollte größer oder gleich 0 sein."
+    },
+    {
+      "id": 8,
+      "shouldFail": true,
+      "cause": "logic_error",
+      "description": "Der Wert des Konstruktorarguments 'radius' sollte unter dem selben Namen als Argument zugänglich sein."
     },
     {
       "id": 5,
       "shouldFail": true,
       "cause": "wrong_result",
-      "description": "Die Fläche des Kreises sollte richtig berechnet werden"
+      "description": "Die Fläche des Kreises sollte richtig berechnet werden."
     }
   ]
 }

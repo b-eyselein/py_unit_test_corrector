@@ -8,8 +8,8 @@ class Circle:
 
         self.center_x: float = center_x
 
-        # if not isinstance(center_y, float) and not isinstance(center_y, int):
-        #     raise Exception("Die y-Koordinate muss eine Zahl sein!")
+        if not isinstance(center_y, float) and not isinstance(center_y, int):
+            raise Exception("Die y-Koordinate muss eine Zahl sein!")
 
         self.center_y: float = center_y
 
@@ -19,7 +19,7 @@ class Circle:
         if radius < 0:
             raise Exception("Der Radius muss größer als 0 sein!")
 
-        self.radius: float = radius
+        self.radius: float = 1  # radius
 
     def area(self) -> float:
         return pi * self.radius * self.radius

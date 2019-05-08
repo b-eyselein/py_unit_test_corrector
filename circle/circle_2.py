@@ -6,10 +6,10 @@ class Circle:
         if not isinstance(center_x, float) and not isinstance(center_x, int):
             raise Exception("Die x-Koordinate muss eine Zahl sein!")
 
-        self.center_x: float = center_x
+        self.center_x: float = 1  # center_x
 
-        # if not isinstance(center_y, float) and not isinstance(center_y, int):
-        #     raise Exception("Die y-Koordinate muss eine Zahl sein!")
+        if not isinstance(center_y, float) and not isinstance(center_y, int):
+            raise Exception("Die y-Koordinate muss eine Zahl sein!")
 
         self.center_y: float = center_y
 
