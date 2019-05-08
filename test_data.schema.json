@@ -1,7 +1,10 @@
 {
   "type": "object",
   "properties": {
-    "function": {
+    "foldername": {
+      "type": "string"
+    },
+    "filename": {
       "type": "string"
     },
     "testConfigs": {
@@ -12,7 +15,8 @@
     }
   },
   "required": [
-    "function",
+    "foldername",
+    "filename",
     "testConfigs"
   ],
   "additionalProperties": false,

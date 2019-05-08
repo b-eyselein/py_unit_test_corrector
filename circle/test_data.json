@@ -1,5 +1,6 @@
 {
-  "function": "circle",
+  "foldername": "circle",
+  "filename": "circle",
   "testConfigs": [
     {
       "id": 0,

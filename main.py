@@ -1,4 +1,5 @@
-from json import dumps as json_dumps
+from json import dumps as json_dumps, load as json_load
+from jsonschema import validate as json_validate
 from pathlib import Path
 from sys import stderr
 from typing import Dict, Optional, List, Union
@@ -8,23 +9,30 @@ from main_helpers import read_test_file_content, run_test, Result, read_complete
 # helpers
 bash_red_esc: str = '\033[0;31m'
 cwd: Path = Path.cwd()
+test_data_schema_path = cwd / 'test_data.schema.json'
+
+with test_data_schema_path.open('r') as test_data_schema_file:
+    test_data_schema = json_load(test_data_schema_file)
 
 # read complete test configuration
 test_config_path: Path = cwd / 'test_data.json'
 
-complete_test_config: Optional[CompleteTestConfig] = read_complete_test_config(test_config_path)
-
-if complete_test_config is None:
+if not test_config_path.exists():
     print(f'There is no test config file {test_config_path}', file=stderr)
     exit(21)
 
-current_exercise: str = complete_test_config.function
+with test_config_path.open() as test_config_file:
+    parsed_json = json_load(test_config_file)
 
-ex_path: Path = cwd / current_exercise
+json_validate(instance=parsed_json, schema=test_data_schema)
+
+complete_test_config: CompleteTestConfig = read_complete_test_config(parsed_json)
+
+ex_path: Path = cwd / complete_test_config.folder_name
 result_file_path: Path = cwd / 'result.json'
 
 # read unit test file content
-test_file_path: Path = ex_path / f'{current_exercise}_test.py'
+test_file_path: Path = ex_path / f'{complete_test_config.filename}_test.py'
 test_file_content: Optional[str] = read_test_file_content(test_file_path)
 if test_file_content is None:
     print(f'{bash_red_esc}There is no test file {test_file_path}!', file=stderr)
@@ -38,7 +46,8 @@ if not result_file_path.exists():
 results: List[Dict] = []
 
 for test_config in complete_test_config.test_configs:
-    result: Union[str, Result] = run_test(ex_path, test_config, test_file_content, current_exercise)
+    result: Union[str, Result] = run_test(ex_path, test_config, test_file_content,
+                                          complete_test_config.folder_name, complete_test_config.filename)
 
     if isinstance(result, Result):
         results.append(result.to_json_dict())

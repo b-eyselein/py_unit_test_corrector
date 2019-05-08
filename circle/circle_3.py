@@ -13,8 +13,9 @@ class Circle:
 
         self.center_y: float = center_y
 
-        # if not isinstance(radius, float) and not isinstance(radius, int):
-        #     raise Exception("Der Radius muss eine Zahl sein!")
+        if not isinstance(radius, float) and not isinstance(radius, int):
+            radius = 0
+            # raise Exception("Der Radius muss eine Zahl sein!")
 
         if radius < 0:
             raise Exception("Der Radius muss größer als 0 sein!")

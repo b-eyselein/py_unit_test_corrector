@@ -1,4 +1,3 @@
-from json import load as json_load
 from pathlib import Path
 from re import compile as re_compile
 from subprocess import CompletedProcess, run as subprocess_run
@@ -35,8 +34,9 @@ class TestConfig:
 
 
 class CompleteTestConfig:
-    def __init__(self, function: str, test_configs: List[TestConfig]):
-        self.function: str = function
+    def __init__(self, folder_name: str, filename: str, test_configs: List[TestConfig]):
+        self.folder_name: str = folder_name
+        self.filename: str = filename
         self.test_configs: List[TestConfig] = test_configs
 
 
@@ -59,20 +59,15 @@ class Result:
         }
 
 
-def read_complete_test_config(test_config_file_path: Path) -> Optional[CompleteTestConfig]:
-    if not test_config_file_path.exists():
-        return None
+def read_complete_test_config(parsed_json: Dict) -> CompleteTestConfig:
+    folder_name: str = parsed_json['foldername']
+    file_name: str = parsed_json['filename']
 
-    with test_config_file_path.open() as test_config_file:
-        parsed_json = json_load(test_config_file)
-
-    function_name: str = parsed_json.get('function')
     test_configs: List[TestConfig] = []
-
     for tc in parsed_json.get('testConfigs'):
         test_configs.append(TestConfig(tc.get('id'), tc.get('shouldFail'), tc.get('cause'), tc.get('description')))
 
-    return CompleteTestConfig(function_name, test_configs)
+    return CompleteTestConfig(folder_name, file_name, test_configs)
 
 
 def read_test_file_content(test_file_path: Path) -> Optional[str]:
@@ -83,20 +78,21 @@ def read_test_file_content(test_file_path: Path) -> Optional[str]:
         return test_file.read()
 
 
-def run_test(ex_path: Path, test: TestConfig, test_file_content: str, current_ex: str) -> Union[str, Result]:
-    file_to_test_path: Path = ex_path / f'{current_ex}_{test.id}.py'
+def run_test(ex_path: Path, test: TestConfig, test_file_content: str,
+             folder_name: str, file_name: str) -> Union[str, Result]:
+    file_to_test_path: Path = ex_path / f'{file_name}_{test.id}.py'
 
-    test_file_path: Path = ex_path / f'{current_ex}_{test.id}_test.py'
+    test_file_path: Path = ex_path / f'{file_name}_{test.id}_test.py'
 
     if not file_to_test_path.exists():
         return f'The file to test {str(file_to_test_path)} does not exist!'
 
     test_file_path.write_text(test_file_content.replace(
-        f'from {current_ex} import {current_ex}',
-        f'from {str(file_to_test_path.name)[:-3]} import {current_ex}'
+        f'from {file_name} import',
+        f'from {str(file_to_test_path.name)[:-3]} import'
     ))
 
-    cmd: str = f'(cd {current_ex} && timeout -t 2 python3 -m unittest {test_file_path.name})'
+    cmd: str = f'(cd {folder_name} && timeout -t 2 python3 -m unittest {test_file_path.name})'
 
     completed_process: CompletedProcess = subprocess_run(cmd, capture_output=True, shell=True, text=True)
 

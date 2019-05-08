@@ -1,5 +1,6 @@
 {
-  "function": "factorial",
+  "foldername": "factorial",
+  "filename": "factorial",
   "testConfigs": [
     {
       "id": 0,

@@ -1,5 +1,6 @@
 {
-  "function": "insert",
+  "foldername": "pysql",
+  "filename": "table",
   "testConfigs": [
     {
       "id": 0,
@@ -16,9 +17,9 @@
       "id": 2,
       "shouldFail": true,
       "cause": "illegal_argument",
-      "description": "Es soll überprüft werden, ob der Inhalt der eingegebenen Liste die gleichen Datentypen hat wie die Anfangsdaten.",
+      "description": "Es soll überprüft werden, ob der Inhalt der eingegebenen Liste die gleichen Datentypen hat wie die Anfangsdaten."
     },
-,    {
+    {
       "id": 3,
       "shouldFail": true,
       "cause": "wrong_result",

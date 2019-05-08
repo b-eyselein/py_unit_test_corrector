@@ -1,5 +1,6 @@
 {
-  "function": "ggt",
+  "foldername": "ggt",
+  "filename": "ggt",
   "testConfigs": [
     {
       "id": 0,

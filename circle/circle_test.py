@@ -28,7 +28,7 @@ class CircleTest(unittest.TestCase):
 
     def test_area(self):
         self.assertAlmostEqual(3.141_592_653, Circle(0, 0, 1).area())
-        self.assertAlmostEqual(6.283_183_306, Circle(0, 0, 2).area())
+        self.assertAlmostEqual(12.566370614359172, Circle(0, 0, 2).area())
 
 
 if __name__ == "__main__":
