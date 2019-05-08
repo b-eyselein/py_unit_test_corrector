@@ -31,13 +31,7 @@
           "type": "boolean"
         },
         "cause": {
-          "type": "string",
-          "enum": [
-            "endless_loop",
-            "wrong_datatype",
-            "illegal_argument",
-            "wrong_result"
-          ]
+          "type": "string"
         },
         "description": {
           "type": "string"
