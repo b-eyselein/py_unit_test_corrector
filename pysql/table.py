@@ -50,7 +50,7 @@ class Table:
     def length(self) -> int:
         return len(self.fields)
 
-    def insert(self, row) -> bool:
+    def insert(self, row: List[str]) -> bool:
         if len(row) != self.length():
             raise Exception("Length of the row does not match table length!")
         else:
