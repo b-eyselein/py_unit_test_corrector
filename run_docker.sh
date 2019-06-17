@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-EX=${1:-factorial}
+EX=${1:?"Error: exercise name / folder is not defined!"}
+
+if [[ ${EX} == */ ]]; then
+    EX=${EX::-1}
+fi
 
 IMG_NAME=beyselein/py_unit_test_corrector:latest
 
@@ -9,7 +13,8 @@ CONF_FILE_NAME=test_data.json
 
 CONF_FILE=${EX}/${CONF_FILE_NAME}
 
-docker build -t ${IMG_NAME} .
+# Build image
+#docker build -t ${IMG_NAME} .
 
 #docker image prune -f
 
@@ -19,6 +24,7 @@ if [[ ! -f ${CONF_FILE} ]]; then
 fi
 
 if [[ ! -f ${RES_FILE} ]]; then
+    mkdir -p results/
     touch ${RES_FILE}
 else
     truncate -s 0 ${RES_FILE}

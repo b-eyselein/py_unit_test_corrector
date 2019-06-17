@@ -1,8 +1,9 @@
 from json import dumps as json_dumps, load as json_load
-from jsonschema import validate as json_validate
 from pathlib import Path
 from sys import stderr
 from typing import Dict, Optional, List, Union
+
+from jsonschema import validate as json_validate
 
 from main_helpers import read_test_file_content, run_test, Result, read_complete_test_config, CompleteTestConfig
 

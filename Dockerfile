@@ -1,9 +1,5 @@
-FROM python:3-alpine
-
-RUN apk update && apk upgrade && pip install -U pip jsonschema
-
-WORKDIR /data
+FROM beyselein/py_correction_base_image
 
 COPY main.py main_helpers.py test_data.schema.json /data/
 
-ENTRYPOINT python3 main.py
+ENTRYPOINT ["python3", "main.py"]
