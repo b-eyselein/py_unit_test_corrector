@@ -7,6 +7,9 @@
     "filename": {
       "type": "string"
     },
+    "testFilename": {
+      "type": "string"
+    },
     "testConfigs": {
       "type": "array",
       "items": {
@@ -17,6 +20,7 @@
   "required": [
     "foldername",
     "filename",
+    "testFilename",
     "testConfigs"
   ],
   "additionalProperties": false,

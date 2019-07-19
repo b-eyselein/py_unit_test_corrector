@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from pathlib import Path
 from re import compile as re_compile
 from subprocess import CompletedProcess, run as subprocess_run
@@ -33,20 +34,21 @@ class TestConfig:
         }
 
 
+@dataclass
 class CompleteTestConfig:
-    def __init__(self, folder_name: str, filename: str, test_configs: List[TestConfig]):
-        self.folder_name: str = folder_name
-        self.filename: str = filename
-        self.test_configs: List[TestConfig] = test_configs
+    folder_name: str
+    filename: str
+    test_filename: str
+    test_configs: List[TestConfig]
 
 
+@dataclass
 class Result:
-    def __init__(self, test_config: TestConfig, file: str, status: int, stdout: str, stderr: str):
-        self.test_config: TestConfig = test_config
-        self.file: str = file
-        self.status: int = status
-        self.stdout: str = stdout
-        self.stderr: str = stderr
+    test_config: TestConfig
+    file: str
+    status: int
+    stdout: str
+    stderr: str
 
     def to_json_dict(self) -> Dict:
         return {
@@ -62,12 +64,13 @@ class Result:
 def read_complete_test_config(parsed_json: Dict) -> CompleteTestConfig:
     folder_name: str = parsed_json['foldername']
     file_name: str = parsed_json['filename']
+    test_filename: str = parsed_json['testFilename']
 
     test_configs: List[TestConfig] = []
-    for tc in parsed_json.get('testConfigs'):
+    for tc in parsed_json['testConfigs']:
         test_configs.append(TestConfig(tc.get('id'), tc.get('shouldFail'), tc.get('cause'), tc.get('description')))
 
-    return CompleteTestConfig(folder_name, file_name, test_configs)
+    return CompleteTestConfig(folder_name, file_name, test_filename, test_configs)
 
 
 def read_test_file_content(test_file_path: Path) -> Optional[str]:
@@ -79,10 +82,10 @@ def read_test_file_content(test_file_path: Path) -> Optional[str]:
 
 
 def run_test(ex_path: Path, test: TestConfig, test_file_content: str,
-             folder_name: str, file_name: str) -> Union[str, Result]:
+             folder_name: str, file_name: str, test_filename: str) -> Union[str, Result]:
     file_to_test_path: Path = ex_path / f'{file_name}_{test.id}.py'
 
-    test_file_path: Path = ex_path / f'{file_name}_{test.id}_test.py'
+    test_file_path: Path = ex_path / test_filename
 
     if not file_to_test_path.exists():
         return f'The file to test {str(file_to_test_path)} does not exist!'

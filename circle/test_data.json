@@ -1,6 +1,7 @@
 {
   "foldername": "circle",
   "filename": "circle",
+  "testFilename": "circle_test.py",
   "testConfigs": [
     {
       "id": 0,

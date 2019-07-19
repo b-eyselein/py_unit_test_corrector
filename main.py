@@ -4,6 +4,7 @@ from sys import stderr
 from typing import Dict, Optional, List, Union
 
 from jsonschema import validate as json_validate
+from jsonschema.exceptions import ValidationError
 
 from main_helpers import read_test_file_content, run_test, Result, read_complete_test_config, CompleteTestConfig
 
@@ -25,7 +26,11 @@ if not test_config_path.exists():
 with test_config_path.open() as test_config_file:
     parsed_json = json_load(test_config_file)
 
-json_validate(instance=parsed_json, schema=test_data_schema)
+try:
+    json_validate(instance=parsed_json, schema=test_data_schema)
+except ValidationError as e:
+    print(e)
+    exit(25)
 
 complete_test_config: CompleteTestConfig = read_complete_test_config(parsed_json)
 
@@ -33,7 +38,7 @@ ex_path: Path = cwd / complete_test_config.folder_name
 result_file_path: Path = cwd / 'result.json'
 
 # read unit test file content
-test_file_path: Path = ex_path / f'{complete_test_config.filename}_test.py'
+test_file_path: Path = ex_path / complete_test_config.test_filename
 test_file_content: Optional[str] = read_test_file_content(test_file_path)
 if test_file_content is None:
     print(f'{bash_red_esc}There is no test file {test_file_path}!', file=stderr)
@@ -48,7 +53,8 @@ results: List[Dict] = []
 
 for test_config in complete_test_config.test_configs:
     result: Union[str, Result] = run_test(ex_path, test_config, test_file_content,
-                                          complete_test_config.folder_name, complete_test_config.filename)
+                                          complete_test_config.folder_name, complete_test_config.filename,
+                                          complete_test_config.test_filename)
 
     if isinstance(result, Result):
         results.append(result.to_json_dict())

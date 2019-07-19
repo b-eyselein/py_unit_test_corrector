@@ -1,6 +1,7 @@
 {
   "foldername": "ggt",
   "filename": "ggt",
+  "testFilename": "ggt_test.py",
   "testConfigs": [
     {
       "id": 0,
