@@ -1,7 +1,7 @@
 {
   "foldername": "circle",
   "filename": "circle",
-  "testFilename": "circle_test",
+  "testFilename": "test_circle",
   "testConfigs": [
     {
       "id": 0,

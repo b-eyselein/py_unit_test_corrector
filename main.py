@@ -38,7 +38,7 @@ ex_path: Path = cwd / complete_test_config.folder_name
 result_file_path: Path = cwd / 'result.json'
 
 # read unit test file content
-test_file_path: Path = ex_path / complete_test_config.test_filename
+test_file_path: Path = ex_path / f'{complete_test_config.test_filename}.py'
 test_file_content: Optional[str] = read_test_file_content(test_file_path)
 if test_file_content is None:
     print(f'{bash_red_esc}There is no test file {test_file_path}!', file=stderr)

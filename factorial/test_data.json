@@ -1,7 +1,7 @@
 {
   "foldername": "factorial",
   "filename": "factorial",
-  "testFilename": "factorial_test",
+  "testFilename": "test_factorial",
   "testConfigs": [
     {
       "id": 0,

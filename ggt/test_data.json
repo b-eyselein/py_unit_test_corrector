@@ -1,7 +1,7 @@
 {
   "foldername": "ggt",
   "filename": "ggt",
-  "testFilename": "ggt_test",
+  "testFilename": "test_ggt",
   "testConfigs": [
     {
       "id": 0,
