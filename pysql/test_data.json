@@ -1,7 +1,7 @@
 {
   "foldername": "pysql",
   "filename": "table",
-  "testFilename": "table_test.py",
+  "testFilename": "table_test",
   "testConfigs": [
     {
       "id": 0,

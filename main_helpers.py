@@ -85,7 +85,7 @@ def run_test(ex_path: Path, test: TestConfig, test_file_content: str,
              folder_name: str, file_name: str, test_filename: str) -> Union[str, Result]:
     file_to_test_path: Path = ex_path / f'{file_name}_{test.id}.py'
 
-    test_file_path: Path = ex_path / test_filename
+    test_file_path: Path = ex_path / f'{test_filename}_{test.id}.py'
 
     if not file_to_test_path.exists():
         return f'The file to test {str(file_to_test_path)} does not exist!'
