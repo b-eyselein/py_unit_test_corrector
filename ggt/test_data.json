@@ -1,5 +1,5 @@
 {
-  "foldername": "ggt",
+  "folderName": "ggt",
   "filename": "ggt",
   "testFilename": "test_ggt",
   "testConfigs": [
@@ -11,49 +11,41 @@
     {
       "id": 1,
       "shouldFail": true,
-      "cause": "wrong_datatype",
       "description": ""
     },
     {
       "id": 2,
       "shouldFail": true,
-      "cause": "wrong_datatype",
       "description": ""
     },
     {
       "id": 3,
       "shouldFail": true,
-      "cause": "illegal_argument",
       "description": ""
     },
     {
       "id": 4,
       "shouldFail": true,
-      "cause": "illegal_argument",
       "description": ""
     },
     {
       "id": 5,
       "shouldFail": true,
-      "cause": "wrong_result",
       "description": ""
     },
     {
       "id": 6,
       "shouldFail": true,
-      "cause": "wrong_result",
       "description": ""
     },
     {
       "id": 7,
       "shouldFail": true,
-      "cause": "wrong_result",
       "description": ""
     },
     {
       "id": 8,
       "shouldFail": true,
-      "cause": "endless_loop",
       "description": ""
     }
   ]

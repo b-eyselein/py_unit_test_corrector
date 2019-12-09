@@ -1,51 +1,30 @@
 {
-  "type": "object",
-  "properties": {
-    "foldername": {
-      "type": "string"
-    },
-    "filename": {
-      "type": "string"
-    },
-    "testFilename": {
-      "type": "string"
-    },
-    "testConfigs": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/TestConfig"
-      }
-    }
-  },
-  "required": [
-    "foldername",
-    "filename",
-    "testFilename",
-    "testConfigs"
-  ],
-  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/TestData",
   "definitions": {
+    "TestData": {
+      "type": "object",
+      "properties": {
+        "folderName": {"type": "string"},
+        "filename": {"type": "string"},
+        "testFilename": {"type": "string"},
+        "testConfigs": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/TestConfig"}
+        }
+      },
+      "required": ["folderName", "filename", "testFilename", "testConfigs"],
+      "additionalProperties": false
+    },
     "TestConfig": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "number"
-        },
-        "shouldFail": {
-          "type": "boolean"
-        },
-        "cause": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        }
+        "id": {"type": "number"},
+        "shouldFail": {"type": "boolean"},
+        "description": {"type": "string"},
+        "file": {}
       },
-      "required": [
-        "id",
-        "shouldFail",
-        "description"
-      ],
+      "required": ["id", "shouldFail", "description"],
       "additionalProperties": false
     }
   }

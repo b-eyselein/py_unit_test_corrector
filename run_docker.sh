@@ -6,7 +6,7 @@ if [[ ${EX} == */ ]]; then
     EX=${EX::-1}
 fi
 
-IMG_NAME=beyselein/py_unit_test_corrector:latest
+IMG_NAME=ls6uniwue/py_unit_test_corrector:0.3.0
 
 RES_FILE=results/${EX}_result.json
 CONF_FILE_NAME=test_data.json

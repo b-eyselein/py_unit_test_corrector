@@ -3,10 +3,10 @@ from pathlib import Path
 from sys import stderr
 from typing import Dict, Optional, List, Union
 
+# noinspection Mypy
 from jsonschema import validate as json_validate
-from jsonschema.exceptions import ValidationError
 
-from main_helpers import read_test_file_content, run_test, Result, read_complete_test_config, CompleteTestConfig
+from main_helpers import read_test_file_content, run_test, Result, CompleteTestConfig
 
 # helpers
 bash_red_esc: str = '\033[0;31m'
@@ -24,21 +24,19 @@ if not test_config_path.exists():
     exit(21)
 
 with test_config_path.open() as test_config_file:
-    parsed_json = json_load(test_config_file)
+    complete_test_config: CompleteTestConfig = json_load(test_config_file)
 
 try:
-    json_validate(instance=parsed_json, schema=test_data_schema)
-except ValidationError as e:
+    json_validate(instance=complete_test_config, schema=test_data_schema)
+except Exception as e:
     print(e)
     exit(25)
 
-complete_test_config: CompleteTestConfig = read_complete_test_config(parsed_json)
-
-ex_path: Path = cwd / complete_test_config.folder_name
+ex_path: Path = cwd / complete_test_config['folderName']
 result_file_path: Path = cwd / 'result.json'
 
 # read unit test file content
-test_file_path: Path = ex_path / f'{complete_test_config.test_filename}.py'
+test_file_path: Path = ex_path / f'{complete_test_config["testFilename"]}.py'
 test_file_content: Optional[str] = read_test_file_content(test_file_path)
 if test_file_content is None:
     print(f'{bash_red_esc}There is no test file {test_file_path}!', file=stderr)
@@ -51,10 +49,15 @@ if not result_file_path.exists():
 
 results: List[Dict] = []
 
-for test_config in complete_test_config.test_configs:
-    result: Union[str, Result] = run_test(ex_path, test_config, test_file_content,
-                                          complete_test_config.folder_name, complete_test_config.filename,
-                                          complete_test_config.test_filename)
+for test_config in complete_test_config['testConfigs']:
+    result: Union[str, Result] = run_test(
+        ex_path,
+        test_config,
+        test_file_content,
+        complete_test_config['folderName'],
+        complete_test_config['filename'],
+        complete_test_config['testFilename']
+    )
 
     if isinstance(result, Result):
         results.append(result.to_json_dict())
