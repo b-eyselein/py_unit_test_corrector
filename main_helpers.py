@@ -72,7 +72,7 @@ def run_test(
         )
     )
 
-    cmd: str = f'(cd {folder_name} && timeout -t 2 python3 -m unittest {test_file_path.name})'
+    cmd: str = f'(cd {folder_name} && timeout 2 python -m unittest {test_file_path.name})'
 
     completed_process: CompletedProcess = subprocess_run(cmd, capture_output=True, shell=True, text=True)
 
