@@ -26,7 +26,8 @@
     {
       "id": 5,
       "shouldFail": true,
-      "description": "Der Wert des Konstruktorarguments 'center_y' sollte unter dem selben Namen als Argument zugänglich sein.",
+      "description": "Der Wert des Konstruktorarguments 'center_y' sollte unter dem selben Namen als Argument zugänglich sein."
+    },
     {
       "id": 6,
       "shouldFail": true,

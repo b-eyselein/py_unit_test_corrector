@@ -2,9 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from re import compile as re_compile
 from subprocess import CompletedProcess, run as subprocess_run
-from typing import Optional, List, Dict, Pattern, Union, Any
-
-from typing_extensions import TypedDict
+from typing import Optional, List, Dict, Pattern, Union, Any, TypedDict
 
 id_regex: Pattern[str] = re_compile(r'.*_(\d+)\.py')
 
