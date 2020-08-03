@@ -1,69 +1,80 @@
 from json import dumps as json_dumps, load as json_load
 from pathlib import Path
 from sys import stderr
-from typing import Dict, Optional, List, Union
+from typing import Dict, Optional, List
 
 # noinspection Mypy
 from jsonschema import validate as json_validate
 
-from main_helpers import read_test_file_content, run_test, Result, CompleteTestConfig
+from main_helpers import run_test
+from model import CompleteTestConfig, CompleteResult, UnitTestCorrectionResult, FileResult
 
 # helpers
-bash_red_esc: str = '\033[0;31m'
 cwd: Path = Path.cwd()
+
 test_data_schema_path = cwd / 'test_data.schema.json'
+test_config_path: Path = cwd / 'test_data.json'
+result_file_path: Path = cwd / 'result.json'
+
+file_results: List[FileResult] = [
+    FileResult.for_file(test_data_schema_path),
+    FileResult.for_file(test_config_path),
+    FileResult.for_file(result_file_path)
+]
+
+missing_files: List[FileResult] = [x for x in file_results if not x.exists]
+
+if len(missing_files) > 0:
+    print(f'Could not find all required files:', file=stderr)
+
+    for f in missing_files:
+        print(f'\t{f}', file=stderr)
+
+    exit(21)
 
 with test_data_schema_path.open('r') as test_data_schema_file:
     test_data_schema = json_load(test_data_schema_file)
 
-# read complete test configuration
-test_config_path: Path = cwd / 'test_data.json'
-
-if not test_config_path.exists():
-    print(f'There is no test config file {test_config_path}', file=stderr)
-    exit(21)
-
-with test_config_path.open() as test_config_file:
-    complete_test_config: CompleteTestConfig = json_load(test_config_file)
+with test_config_path.open('r') as test_config_file:
+    loaded_json: Dict = json_load(test_config_file)
 
 try:
-    json_validate(instance=complete_test_config, schema=test_data_schema)
+    json_validate(instance=loaded_json, schema=test_data_schema)
 except Exception as e:
     print(e)
-    exit(25)
-
-ex_path: Path = cwd / complete_test_config['folderName']
-result_file_path: Path = cwd / 'result.json'
-
-# read unit test file content
-test_file_path: Path = ex_path / f'{complete_test_config["testFilename"]}.py'
-test_file_content: Optional[str] = read_test_file_content(test_file_path)
-if test_file_content is None:
-    print(f'{bash_red_esc}There is no test file {test_file_path}!', file=stderr)
     exit(22)
 
-# ensure that result file is mounted
-if not result_file_path.exists():
-    print(f'{bash_red_esc}There is no result file {result_file_path}', file=stderr)
+complete_test_config: CompleteTestConfig = CompleteTestConfig.parse_from_json(loaded_json)
+
+folder_name: str = complete_test_config.folder_name
+test_file_name: str = complete_test_config.test_file_name
+
+# read unit test file content
+test_file_path: Path = cwd / folder_name / f'{test_file_name}.py'
+file_results.append(FileResult.for_file(test_file_path))
+
+test_file_content: Optional[str] = test_file_path.read_text()
+if not test_file_path.exists():
     exit(23)
 
-results: List[Dict] = []
+if test_file_content is None:
+    print(f'There is no test file {test_file_path}!', file=stderr)
+    exit(24)
 
-for test_config in complete_test_config['testConfigs']:
-    result: Union[str, Result] = run_test(
-        ex_path,
-        test_config,
-        test_file_content,
-        complete_test_config['folderName'],
-        complete_test_config['filename'],
-        complete_test_config['testFilename']
+results: List[UnitTestCorrectionResult] = []
+
+for test_config in complete_test_config.test_configs:
+    file_result, result = run_test(
+        cwd, test_config, test_file_content, folder_name, complete_test_config.file_name, test_file_name
     )
 
-    if isinstance(result, Result):
-        results.append(result.to_json_dict())
-    else:
-        # TODO: process error msg further?!
-        print(f'{bash_red_esc}There has been an error while correction: {result}')
-        exit(24)
+    file_results.append(file_result)
 
-result_file_path.write_text(json_dumps({'results': results}, indent=2))
+    if isinstance(result, UnitTestCorrectionResult):
+        results.append(result)
+
+complete_result = CompleteResult(file_results, results)
+
+result_file_path.write_text(
+    json_dumps(complete_result.to_json_dict(), indent=2)
+)

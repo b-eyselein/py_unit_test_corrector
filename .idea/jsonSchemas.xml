@@ -3,12 +3,12 @@
   <component name="JsonSchemaMappingsProjectConfiguration">
     <state>
       <map>
-        <entry key="test_conf.schema">
+        <entry key="test_data.schema">
           <value>
             <SchemaInfo>
-              <option name="name" value="test_conf.schema" />
+              <option name="name" value="test_data.schema" />
               <option name="relativePathToSchema" value="test_data.schema.json" />
-              <option name="schemaVersion" value="JSON schema version 7" />
+              <option name="schemaVersion" value="JSON Schema version 7" />
               <option name="patterns">
                 <list>
                   <Item>

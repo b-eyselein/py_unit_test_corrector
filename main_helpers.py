@@ -1,67 +1,25 @@
-from dataclasses import dataclass
 from pathlib import Path
-from re import compile as re_compile
 from subprocess import CompletedProcess, run as subprocess_run
-from typing import Optional, List, Dict, Pattern, Union, Any, TypedDict
+from typing import Tuple, Optional
 
-id_regex: Pattern[str] = re_compile(r'.*_(\d+)\.py')
-
-
-class TestConfig(TypedDict):
-    id: int
-    shouldFail: bool
-    description: str
-    file: Any
-
-
-class CompleteTestConfig(TypedDict):
-    folderName: str
-    filename: str
-    testFilename: str
-    testConfigs: List[TestConfig]
-
-
-@dataclass
-class Result:
-    test_config: TestConfig
-    file: str
-    status: int
-    stdout: str
-    stderr: str
-
-    def to_json_dict(self) -> Dict:
-        return {
-            'testConfig': self.test_config,
-            'successful': (self.status == 0) != self.test_config['shouldFail'],
-            'file': self.file,
-            'status': self.status,
-            'stdout': self.stdout,
-            'stderr': self.stderr
-        }
-
-
-def read_test_file_content(test_file_path: Path) -> Optional[str]:
-    if not test_file_path.exists():
-        return None
-
-    with test_file_path.open() as test_file:
-        return test_file.read()
+from model import TestConfig, UnitTestCorrectionResult, FileResult
 
 
 def run_test(
-        ex_path: Path,
+        cwd: Path,
         test: TestConfig,
         test_file_content: str,
         folder_name: str,
         file_name: str,
         test_filename: str
-) -> Union[str, Result]:
-    file_to_test_path: Path = ex_path / f'{file_name}_{test["id"]}.py'
+) -> Tuple[FileResult, Optional[UnitTestCorrectionResult]]:
+    file_to_test_path: Path = cwd / folder_name / f'{file_name}_{test.id}.py'
+    test_file_path: Path = cwd / folder_name / f'{test_filename}_{test.id}.py'
 
-    test_file_path: Path = ex_path / f'{test_filename}_{test["id"]}.py'
+    file_result = FileResult.for_file(file_to_test_path)
 
-    if not file_to_test_path.exists():
-        return f'The file to test {str(file_to_test_path)} does not exist!'
+    if not file_result.exists:
+        return file_result, None
 
     test_file_path.write_text(
         test_file_content.replace(
@@ -76,10 +34,11 @@ def run_test(
 
     test_file_path.unlink()
 
-    return Result(
-        test,
-        str(file_to_test_path),
-        completed_process.returncode,
-        completed_process.stdout[:10_000].split('\n')[:50],
-        completed_process.stderr[:10_000].split('\n')[:50]
+    return file_result, UnitTestCorrectionResult(
+        test_id=test.id,
+        description=test.description,
+        should_fail=test.should_fail,
+        status=completed_process.returncode,
+        stdout=completed_process.stdout[:10_000].split('\n')[:50],
+        stderr=completed_process.stderr[:10_000].split('\n')[:50]
     )
